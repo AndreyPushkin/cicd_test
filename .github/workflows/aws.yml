@@ -36,9 +36,9 @@ jobs:
 
         run: |
           # Saving the private key to a file
-          # aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          # aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          # aws configure set default.region ${{ env.AWS_REGION }}
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ env.AWS_REGION }}
 
           # Add your deployment commands here
           # Use scp command to copy cat.py to the EC2 instance
