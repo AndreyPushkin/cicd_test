@@ -13,37 +13,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip
-          pip3 install --upgrade awscli
-      
-      - name: Use SSH key
-        uses: webfactory/ssh-agent@v0.5.0
-        with:
-          ssh-private-key: ${{ secrets.YOUR_SECRET_PRIVATE_KEY }}
-
-      - name: List SSH identities
-        run: ssh-add -l
       - name: Install SSH client
         run: sudo apt-get update && sudo apt-get install -y openssh-client
 
-      - name: Create empty global known_hosts files
-        run: |
-          sudo touch /etc/ssh/ssh_known_hosts
-          sudo touch /etc/ssh/ssh_known_hosts2
-          sudo chmod 644 /etc/ssh/ssh_known_hosts
-          sudo chmod 644 /etc/ssh/ssh_known_hosts2
-
-      - name: Deploy to EC2
+      - name: Save the private key to a file
         env:
           PRIVATE_KEY: ${{ secrets.YOUR_SECRET_PRIVATE_KEY }}
         run: |
-          # Save the private key to a file
           echo "$PRIVATE_KEY" > private-key.pem
           chmod 400 private-key.pem
 
+      - name: Create the known_hosts file
+        run: |
+          mkdir -p ~/.ssh
+          touch ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Add remote host key to known_hosts
+        run: |
+          ssh-keyscan ec2-54-167-45-44.compute-1.amazonaws.com >> ~/.ssh/known_hosts
+
+      - name: Deploy to EC2
+        run: |
           # Use scp command to copy cat.py to the EC2 instance
           scp -v -i private-key.pem cat.py ec2-user@ec2-54-167-45-44.compute-1.amazonaws.com:.
 
@@ -51,21 +42,3 @@ jobs:
         run: |
           # Removing the private key file after usage
           rm private-key.pem
-      # - name: Deploy to EC2
-      #   env:
-      #     AWS_REGION: us-east-1
-
-      #   run: |
-      #     # Saving the private key to a file
-      #     aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws configure set default.region ${{ env.AWS_REGION }}
-
-      #     # Add your deployment commands here
-      #     # Use scp command to copy cat.py to the EC2 instance
-      #     sudo touch /etc/ssh/ssh_known_hosts
-      #     sudo touch /etc/ssh/ssh_known_hosts2
-      #     sudo chmod 644 /etc/ssh/ssh_known_hosts
-      #     sudo chmod 644 /etc/ssh/ssh_known_hosts2
-
-      #     scp -v -i $SSH_AUTH_SOCK cat.py ec2-user@ec2-54-167-45-44.compute-1.amazonaws.com:.
