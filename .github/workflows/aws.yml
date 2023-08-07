@@ -1,0 +1,32 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install --upgrade awscli
+
+      - name: Deploy to EC2
+        env:
+          AWS_REGION: your-aws-region
+        run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws configure set default.region ${{ env.AWS_REGION }}
+
+          # Add your deployment commands here
+          # Example: Use SCP to copy files to the EC2 instance
+          scp -i /path/to/your/ec2-key.pem -r /path/to/your/app user@your-ec2-instance:/path/on/ec2
