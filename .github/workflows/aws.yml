@@ -42,4 +42,6 @@ jobs:
 
           # Add your deployment commands here
           # Use scp command to copy cat.py to the EC2 instance
+          touch ~/.ssh/known_hosts
+
           scp -v -i $SSH_AUTH_SOCK cat.py ec2-user@ec2-54-167-45-44.compute-1.amazonaws.com:.
