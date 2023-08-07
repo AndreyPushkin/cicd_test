@@ -18,6 +18,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3-pip
           pip3 install --upgrade awscli
+      
+      - name: Use SSH key
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.YOUR_SECRET_PRIVATE_KEY }}
 
       - name: List SSH identities
         run: ssh-add -l
@@ -25,7 +30,7 @@ jobs:
 
       - name: Deploy to EC2
         env:
-          AWS_REGION: us-east-1b
+          AWS_REGION: us-east-1
         run: |
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
