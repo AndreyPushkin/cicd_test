@@ -29,4 +29,4 @@ jobs:
 
           # Add your deployment commands here
           # Example: Use SCP to copy files to the EC2 instance
-          scp -i /path/to/your/ec2-key.pem -r /path/to/your/app user@your-ec2-instance:/path/on/ec2
+          scp -i avp.pem cat.py ec2-user@ec2-54-167-45-44.compute-1.amazonaws.com:.
