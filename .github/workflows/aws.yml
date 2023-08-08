@@ -39,8 +39,7 @@ jobs:
           scp -v -i private-key.pem cat.py ec2-user@ec2-54-167-45-44.compute-1.amazonaws.com:.
       - name: SSH into EC2 and run git pull
         run: |
-          ssh -i private-key.pem ec2-user@ec2-54-167-45-44.compute-1.amazonaws.com 'cd /home/ec2-user/cicdprod
-          && git pull'
+          ssh -i private-key.pem ec2-user@ec2-54-167-45-44.compute-1.amazonaws.com 'cd /home/ec2-user/cicdprod && git pull'
   
 
       - name: Clean up
