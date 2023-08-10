@@ -10,8 +10,8 @@ jobs:
     runs-on: self-hosted  # Use the label of your self-hosted runner
 
     steps:
-      - name: Checkout code
-        run: git clone https://github.com/YourUsername/YourRepository.git repo
+    #   - name: Checkout code
+    #     run: git clone https://github.com/YourUsername/YourRepository.git repo
 
       - name: Run git pull on server
         run: |
