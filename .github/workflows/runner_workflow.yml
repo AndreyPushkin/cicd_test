@@ -15,6 +15,5 @@ jobs:
 
       - name: Run git pull on server
         run: |
-
           ssh -i ~/.ssh/id_rsa ec2-user@ec2-54-167-45-44.compute-1.amazonaws.com
           'cd /home/ec2-user/cicdprod && git pull'
